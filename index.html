@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>GifTastic</title>
+   
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <button data-search="happy">HAPPY</button>
+    <button data-search="frustrated">FRUSTRATED</button>
+    <script type="text/javascript">
+      $("button").on("click", function() {
+        var x = $(this).data("search");
+        console.log(x);
+
+        var queryURL =
+          "https://api.giphy.com/v1/gifs/search?q=" +
+          x +
+          "api_key=YjUF4DPZXXXiu7JKzVE6d9BPQ2VxVt2Q&limit=10";
+        console.log(queryURL);
+
+        $.ajax({ url: queryURL, method: "GET" }).done(function(response) {
+          console.log(response);
+        });
+      });
+    </script>
+  </body>
+</html>

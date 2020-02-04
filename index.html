@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>GifTastic</title>
-   
   </head>
   <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <button data-search="happy">HAPPY</button>
     <button data-search="frustrated">FRUSTRATED</button>
+    <button data-search="sleepy">SLEEPY</button>
+
+    <div id="GIFArea"></div>
+
     <script type="text/javascript">
       $("button").on("click", function() {
         var x = $(this).data("search");
@@ -19,11 +22,22 @@
         var queryURL =
           "https://api.giphy.com/v1/gifs/search?q=" +
           x +
-          "api_key=YjUF4DPZXXXiu7JKzVE6d9BPQ2VxVt2Q&limit=10";
+          "&api_key=YjUF4DPZXXXiu7JKzVE6d9BPQ2VxVt2Q&limit=10";
         console.log(queryURL);
 
-        $.ajax({ url: queryURL, method: "GET" }).done(function(response) {
-          console.log(response);
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).done(function(response) {
+          console.log(response.data[0].rating);
+          for (let i = 0; i < response.data.length; i++) {
+            $("#GIFArea").prepend(
+              "<p>Rating: " + response.data[i].rating + "</p>"
+            );
+            $("#GIFArea").prepend(
+              "<img src ='" + response.data[i].images.downsized.url + "'>"
+            );
+          }
         });
       });
     </script>

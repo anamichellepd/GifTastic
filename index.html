@@ -8,14 +8,47 @@
   </head>
   <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <button data-search="happy">HAPPY</button>
+    <!-- <button data-search="happy">HAPPY</button>
     <button data-search="frustrated">FRUSTRATED</button>
     <button data-search="sleepy">SLEEPY</button>
-
+    -->
+    <form>
+    <div class="form-group">
+      <label for="inputSearchTerm">Search Term:</label>
+      <input class="form-control" id="search-term" />
+    </div>
+</form>
+    <button type="search" class="btn btn-primary" id="search-btn">
+      Search
+    </button>
+    <button type="clear" class="btn btn-primary" id="clear-btn">
+      Clear Results
+    </button>
+    <div id="buttonArea"></div>
     <div id="GIFArea"></div>
 
     <script type="text/javascript">
-      $("button").on("click", function() {
+      //Arrays
+
+      const topics = [
+        "happy",
+        "sad",
+        "loud",
+        "tired",
+        "energized",
+        "thankful",
+        "sloppy",
+        "smart"
+      ];
+
+    
+      for (let i = 0; i < topics.length; i++) {
+        const mood = topics[i];
+
+        $("#buttonArea").append("<button class=gifButton data-search="+mood+" >" + mood + "</button>");
+      }
+
+      $(".gifButton").on("click", function() {
         var x = $(this).data("search");
         console.log(x);
 
@@ -30,12 +63,12 @@
           method: "GET"
         }).done(function(response) {
           console.log(response.data[0].rating);
-          for (let i = 0; i < response.data.length; i++) {
+          for (let j = 0; j < response.data.length; j++) {
             $("#GIFArea").prepend(
-              "<p>Rating: " + response.data[i].rating + "</p>"
+              "<p>Rating: " + response.data[j].rating + "</p>"
             );
             $("#GIFArea").prepend(
-              "<img src ='" + response.data[i].images.downsized.url + "'>"
+              "<img src ='" + response.data[j].images.downsized.url + "'>"
             );
           }
         });

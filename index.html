@@ -13,11 +13,11 @@
     <button data-search="sleepy">SLEEPY</button>
     -->
     <form>
-    <div class="form-group">
-      <label for="inputSearchTerm">Search Term:</label>
-      <input class="form-control" id="search-term" />
-    </div>
-</form>
+      <div class="form-group">
+        <label for="inputSearchTerm">Search Term:</label>
+        <input class="form-control" id="search-term" />
+      </div>
+    </form>
     <button type="search" class="btn btn-primary" id="search-btn">
       Search
     </button>
@@ -28,6 +28,11 @@
     <div id="GIFArea"></div>
 
     <script type="text/javascript">
+
+var APIkey = "YjUF4DPZXXXiu7JKzVE6d9BPQ2VxVt2Q";
+var query;
+var queryURL =  "https://api.giphy.com/v1/gifs/search?q=" + query + APIkey + "&limit=10";
+
       //Arrays
 
       const topics = [
@@ -41,13 +46,18 @@
         "smart"
       ];
 
-    
       for (let i = 0; i < topics.length; i++) {
         const mood = topics[i];
 
-        $("#buttonArea").append("<button class=gifButton data-search="+mood+" >" + mood + "</button>");
+        $("#buttonArea").append(
+          "<button class=gifButton data-search=" +
+            mood +
+            " >" +
+            mood +
+            "</button>"
+        );
       }
-
+     
       $(".gifButton").on("click", function() {
         var x = $(this).data("search");
         console.log(x);
@@ -72,6 +82,18 @@
             );
           }
         });
+        $("#search-btn").on('click', function(event){
+    event.preventDefault();
+    $.ajax({ 
+        method : "GET",
+        url : queryUrl
+    }).then(function(response){
+        console.log(response);
+        console.log(response.response.docs[2].abstract);
+    //    for(var i=0; i<response.response.docs.length; i++){
+    //     $('#buttonArea').append('<button'+response.response.docs[i].abstract+'</p>');
+       })
+    });
       });
     </script>
   </body>

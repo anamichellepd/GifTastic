@@ -56,7 +56,9 @@
               "<p>Rating: " + GIFData.data[k].rating + "</p>"
             );
             $("#GIFArea").prepend(
-              "<img src ='" + GIFData.data[k].images.downsized.url + "'>"
+              `<img src ='
+                      ${GIFData.data[k].images.downsized.url}'
+                      data-still='${GIFData.data[k].images.downsized_still.url} 'data-animate='${GIFData.data[k].images.downsized.url}'data-state='still'>`
             );
           }
           $("#buttonArea").append("<button>" + answer + "</button>");
@@ -64,6 +66,22 @@
           console.log(GIFData);
         });
       }
+
+      //Click handler for GIF
+      $("#GIFArea").on("click", "img", function(event) {
+        console.log(event.target.attributes[3].value);
+        var state = event.target.attributes[3].value;
+
+        if (state === "still") {
+          //if the state equals "still", which it will be when the page first loads before clicking.
+          //set the image's data-state to "animate", and set the image's source to equal the image's data-animate attribute
+          //else, the opposite. set data-state to still and set URL to image to the still one.
+          state = "animate";
+        }
+        //   src=
+        //)
+      });
+
       $("#search-btn").on("click", function() {
         var queryTerm = $("#search")
           .val()
@@ -108,8 +126,8 @@
             );
             $("#GIFArea").prepend(
               `<img src ='
-                ${response.data[j].images.downsized.url}'
-                data-still='${response.data[j].images.downsized_still.url} 'data-animate='${response.data[j].images.downsized.url}'>"
+                      ${response.data[j].images.downsized.url}'
+                      data-still='${response.data[j].images.downsized_still.url} 'data-animate='${response.data[j].images.downsized.url}'>`
             );
           }
         });

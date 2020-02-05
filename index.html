@@ -7,35 +7,37 @@
     <title>GifTastic</title>
   </head>
   <body>
+    <!--JQuery link-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- <button data-search="happy">HAPPY</button>
-    <button data-search="frustrated">FRUSTRATED</button>
-    <button data-search="sleepy">SLEEPY</button>
-    -->
+    <!--Search bar-->
     <form>
       <div class="form-group">
         <label for="search">Search Term:</label>
         <input class="form-control" id="search" />
       </div>
     </form>
+    <!--Search and clear buttons-->
     <button type="search" class="btn btn-primary" id="search-btn">
       Search
     </button>
     <button type="clear" class="btn btn-primary" id="clear-btn">
       Clear Results
     </button>
+
+    <!--Button and GIF areas-->
     <div id="buttonArea"></div>
     <div id="GIFArea"></div>
 
+    <!--JAVASCRIPT-->
     <script type="text/javascript">
+      //Variables for the API to Giphy
       var APIkey = "YjUF4DPZXXXiu7JKzVE6d9BPQ2VxVt2Q";
       var query = "";
       var numResults = 10;
       var queryURL =
         "https://api.giphy.com/v1/gifs/search?apikey=" + APIkey + "&qlength=10";
 
-      //Arrays
-
+      //Array of moods
       const topics = [
         "happy",
         "sad",
@@ -47,19 +49,27 @@
         "smart"
       ];
 
+      //Function to run a query for the term searched
       function runQuery(queryURL) {
-        const answer = $("#search").val();
+        const answer = $("#search").val(); //variable for value of search bar
         $.ajax({ url: queryURL, method: "GET" }).done(function(GIFData) {
           console.log(GIFData.data[0]);
           for (let k = 0; k < GIFData.data.length; k++) {
             $("#GIFArea").prepend(
+              //adding the rating to the GIF area
               "<p>Rating: " + GIFData.data[k].rating + "</p>"
             );
             $("#GIFArea").prepend(
+              //adding the GIF to the GIF area
               `<img src ='
-                      ${GIFData.data[k].images.downsized.url}'
+                      ${GIFData.data[k].images.downsized_still.url}'
                       data-still='${GIFData.data[k].images.downsized_still.url} 'data-animate='${GIFData.data[k].images.downsized.url}'data-state='still'>`
             );
+            if ("data-state" === "still") {
+              $("img").attr("src=data-still");
+            } else {
+              $("img").attr("src=data-animate");
+            }
           }
           $("#buttonArea").append("<button>" + answer + "</button>");
           console.log(queryURL);
@@ -76,12 +86,16 @@
           //if the state equals "still", which it will be when the page first loads before clicking.
           //set the image's data-state to "animate", and set the image's source to equal the image's data-animate attribute
           //else, the opposite. set data-state to still and set URL to image to the still one.
-          state = "animate";
+          var state = "animate";
+          $(this).attr("src", "GIFData.data[k].images.downsized.url");
+        } else {
+          $(this).attr("src", "GIFData.data[k].images.downsized_still.url");
         }
         //   src=
         //)
       });
 
+      //When clicking search button
       $("#search-btn").on("click", function() {
         var queryTerm = $("#search")
           .val()
@@ -105,13 +119,14 @@
         );
       }
 
+      //When clicking GIF button
       $("#buttonArea").on("click", ".gifButton", function() {
-        var x = $(this).data("search");
-        console.log(x);
+        var query = $(this).data("search");
+        console.log(query);
 
         var queryURL =
           "https://api.giphy.com/v1/gifs/search?q=" +
-          x +
+          query +
           "&api_key=YjUF4DPZXXXiu7JKzVE6d9BPQ2VxVt2Q&limit=10";
         console.log(queryURL);
 

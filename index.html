@@ -31,7 +31,8 @@
       var APIkey = "YjUF4DPZXXXiu7JKzVE6d9BPQ2VxVt2Q";
       var query = "";
       var numResults = 10;
-      var queryURL = "https://api.giphy.com/v1/gifs/search?apikey=" + APIkey;
+      var queryURL =
+        "https://api.giphy.com/v1/gifs/search?apikey=" + APIkey + "&qlength=10";
 
       //Arrays
 
@@ -45,9 +46,11 @@
         "sloppy",
         "smart"
       ];
-      function runQuery(numResults, queryURL) {
+
+      function runQuery(queryURL) {
+        const answer = $("#search").val();
         $.ajax({ url: queryURL, method: "GET" }).done(function(GIFData) {
-          console.log(GIFData.data[0].rating);
+          console.log(GIFData.data[0]);
           for (let k = 0; k < GIFData.data.length; k++) {
             $("#GIFArea").prepend(
               "<p>Rating: " + GIFData.data[k].rating + "</p>"
@@ -56,6 +59,7 @@
               "<img src ='" + GIFData.data[k].images.downsized.url + "'>"
             );
           }
+          $("#buttonArea").append("<button>" + answer + "</button>");
           console.log(queryURL);
           console.log(GIFData);
         });
@@ -64,9 +68,10 @@
         var queryTerm = $("#search")
           .val()
           .trim();
+
         var newURL = queryURL + "&q=" + queryTerm;
 
-        runQuery(numResults, newURL);
+        runQuery(newURL);
         // return false;
       });
 
@@ -82,7 +87,7 @@
         );
       }
 
-      $(".gifButton").on("click", function() {
+      $("#buttonArea").on("click", ".gifButton", function() {
         var x = $(this).data("search");
         console.log(x);
 
@@ -102,22 +107,12 @@
               "<p>Rating: " + response.data[j].rating + "</p>"
             );
             $("#GIFArea").prepend(
-              "<img src ='" + response.data[j].images.downsized.url + "'>"
+              `<img src ='
+                ${response.data[j].images.downsized.url}'
+                data-still='${response.data[j].images.downsized_still.url} 'data-animate='${response.data[j].images.downsized.url}'>"
             );
           }
         });
-        // $("#search-btn").on("click", function(event) {
-        //   event.preventDefault();
-        //   $.ajax({
-        //     method: "GET",
-        //     url: queryUrl
-        //   }).then(function(response) {
-        //     console.log(response);
-        //     console.log(response.response.docs[2].abstract);
-        //     //    for(var i=0; i<response.response.docs.length; i++){
-        //     //     $('#buttonArea').append('<button'+response.response.docs[i].abstract+'</p>');
-        //   });
-        // });
       });
     </script>
   </body>
